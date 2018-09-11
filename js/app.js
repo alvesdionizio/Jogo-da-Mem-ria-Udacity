@@ -1,3 +1,17 @@
+'use strict'
+var figuraAberta = [];
+var movimentos = 0;
+var acertos = 0;
+var arr;
+var estrelas;
+var start = new Date().getTime();
+var end;
+var items = document.querySelectorAll('.card'); 
+
+const btn_reiniciar = document.getElementsByClassName("restart")[0];
+const playAgain = document.getElementById("playAgain");
+const indice = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+
 /*
  * Create a list that holds all of your cards
  */
@@ -31,19 +45,15 @@ function shuffle(array) {
   return array;
 }
 
-var figuraAberta = [];
-var movimentos = 0;
-var acertos = 0;
-
-const items = document.querySelectorAll('.card'); 
-arr = shuffle(items);
+arr = shuffle(indice);
 
 for (var i = 0; i < 16; i++) {
-	items[i] = arr[i];
+	var elemento = items[arr[i]].cloneNode(true);
+	var destino = document.querySelectorAll('.card')[i];
+	destino.replaceWith(elemento);
 }
 
-const btn_reiniciar = document.getElementsByClassName("restart")[0];
-const playAgain = document.getElementById("playAgain");
+items = document.querySelectorAll('.card');
 
 btn_reiniciar.addEventListener('click', function(){
 	reiniciar();
@@ -58,14 +68,14 @@ for (let i = 0; i <= 15; i++) {
     item.addEventListener('click', function () { 
 		if(verificarfigura(item) == false) {
 			abrirfigura(item, i);
+			setTimeout(function() {
+				verificarMatch();
+			},600);
+			incrementarMovimentos();
+			analisarEstrelas();
+			
 		} 
-
-		setTimeout(function() {
-			verificarMatch();
-		},600);
-		incrementarMovimentos();
-		analisarEstrelas();
-		verificarFimDeJogo();
+		
 	});
 } 
 
@@ -96,8 +106,9 @@ function verificarfigura(elemento) {
 function verificarMatch(){
 	if(figuraAberta.length == 2){
 		if(items[figuraAberta[0]].querySelector('i').className  == items[figuraAberta[1]].querySelector('i').className ){
-			fixarFigurasIguais();
 			acertos++;
+			fixarFigurasIguais();
+			verificarFimDeJogo();
 		} else {
 			figurasDiferentes();
 		}
@@ -131,9 +142,6 @@ function analisarEstrelas(){
 	if(movimentos >= 22){
 		estrelas[1].classList.remove("cor");
 	}
-	if(movimentos >= 26){
-		estrelas[0].classList.remove("cor");
-	}
 	
 }
 
@@ -153,11 +161,13 @@ function reiniciar(){
 
 	document.getElementsByClassName("container")[1].classList.add("invisivel");
 	document.getElementsByClassName("container")[0].classList.remove("invisivel");
+	start = new Date().getTime();
 }
 
 function verificarFimDeJogo(){
 	if(acertos == 8){
-		document.getElementById("texto").innerHTML = "With "+ movimentos +" moves and "+ document.getElementsByClassName("cor").length +" Stars.";
+		end = new Date().getTime();
+		document.getElementById("texto").innerHTML = "With "+ movimentos +" moves, "+ (end-start)/1000 +" seconds and "+ document.getElementsByClassName("cor").length +" Stars.";
 		document.getElementsByClassName("container")[0].classList.add("invisivel");
 		document.getElementsByClassName("container")[1].classList.remove("invisivel");
 	}
