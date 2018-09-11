@@ -9,9 +9,9 @@ O jogador deve encontrar todos os pares de cartas, revelando as cartas de duas e
 
 ## Pontuação
 
-*1 estrela por encontrar todos os pares;
-*2 estrelas por encontrar todos os pares em até 18 movimentos.
-*3 estrelas por encontrar todos os pares em até 22 movimentos.
+1 estrela por encontrar todos os pares;
+2 estrelas por encontrar todos os pares em até 18 movimentos;
+3 estrelas por encontrar todos os pares em até 22 movimentos.
 
 ## Estrutura do Jogo
 
