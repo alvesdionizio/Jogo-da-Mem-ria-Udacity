@@ -45,15 +45,38 @@ function shuffle(array) {
   return array;
 }
 
-arr = shuffle(indice);
 
-for (var i = 0; i < 16; i++) {
-	var elemento = items[arr[i]].cloneNode(true);
-	var destino = document.querySelectorAll('.card')[i];
-	destino.replaceWith(elemento);
+function embaralhar() {
+	timer();
+	items = document.querySelectorAll('.card');
+	arr = shuffle(indice);
+
+	for (var i = 0; i < 16; i++) {
+		var elemento = items[arr[i]].cloneNode(true);
+		var destino = document.querySelectorAll('.card')[i];
+		destino.replaceWith(elemento);
+	}
+
+	items = document.querySelectorAll('.card');
+
+	for (let i = 0; i <= 15; i++) { 
+	    const item = items[i]; 
+	    item.addEventListener('click', function () { 
+			if(verificarfigura(item) == false) {
+				abrirfigura(item, i);
+				setTimeout(function() {
+					verificarMatch();
+				},600);
+				incrementarMovimentos();
+				analisarEstrelas();
+				
+			} 
+			
+		});
+	} 
 }
 
-items = document.querySelectorAll('.card');
+embaralhar();
 
 btn_reiniciar.addEventListener('click', function(){
 	reiniciar();
@@ -62,22 +85,6 @@ btn_reiniciar.addEventListener('click', function(){
 playAgain.addEventListener('click', function(){
 	reiniciar();
 });
-
-for (let i = 0; i <= 15; i++) { 
-    const item = items[i]; 
-    item.addEventListener('click', function () { 
-		if(verificarfigura(item) == false) {
-			abrirfigura(item, i);
-			setTimeout(function() {
-				verificarMatch();
-			},600);
-			incrementarMovimentos();
-			analisarEstrelas();
-			
-		} 
-		
-	});
-} 
 
 function abrirfigura(elemento, i) {
 	elemento.classList.add("open");
@@ -146,6 +153,7 @@ function analisarEstrelas(){
 }
 
 function reiniciar(){
+	embaralhar();
 	figuraAberta = [];
 	for (let i = 0; i <= 15; i++) { 
 	    items[i].classList.remove("match");
@@ -162,6 +170,7 @@ function reiniciar(){
 	document.getElementsByClassName("container")[1].classList.add("invisivel");
 	document.getElementsByClassName("container")[0].classList.remove("invisivel");
 	start = new Date().getTime();
+
 }
 
 function verificarFimDeJogo(){
@@ -171,6 +180,13 @@ function verificarFimDeJogo(){
 		document.getElementsByClassName("container")[0].classList.add("invisivel");
 		document.getElementsByClassName("container")[1].classList.remove("invisivel");
 	}
+}
+
+function timer () {
+    setInterval(function() {
+        end = new Date().getTime();
+        document.getElementsByClassName("tempo")[0].innerHTML = "Tempo: "+(end-start)/1000;
+    });
 }
 
 /*
